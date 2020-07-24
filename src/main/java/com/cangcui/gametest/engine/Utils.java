@@ -5,6 +5,12 @@ import java.util.Scanner;
 
 public class Utils {
 
+	/**
+	 * Gets the content of a resource file as string.
+	 * @param fileName The name of the resource file
+	 * @return the content of the file
+	 * @throws Exception when something is wrong upon reading the file
+	 */
     public static String loadResource(String fileName) throws Exception {
         String result;
         try (InputStream in = Utils.class.getResourceAsStream(fileName);
