@@ -5,6 +5,9 @@ import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.system.*;
 
+import com.cangcui.gametest.engine.GameEngine;
+import com.cangcui.gametest.engine.IGameLogic;
+
 import java.nio.*;
 
 import static org.lwjgl.glfw.Callbacks.*;
@@ -112,10 +115,15 @@ public class Main {
 
 	public static void main(String[] args) {
 //		new Main().run();
-//		try {
+		try {
 			boolean vSync = true;
-//			IGameLogic gameLogic = 
-//		}
+			IGameLogic gameLogic = new DummyGame();
+			GameEngine engine = new GameEngine("Game Test", 640, 480, vSync, gameLogic);
+			engine.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
 	}
 
 }

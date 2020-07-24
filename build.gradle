@@ -3,7 +3,7 @@ plugins {
 	id 'application'
 }
 
-mainClassName = 'com.cangcui.gametest.Main'
+mainClassName = 'com.cangcui.gametest.game.Main'
 
 project.ext.lwjglVersion = "3.2.3"
 project.ext.lwjglNatives = "natives-windows"

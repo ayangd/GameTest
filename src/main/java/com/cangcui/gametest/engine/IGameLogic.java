@@ -25,4 +25,9 @@ public interface IGameLogic {
 	 * @param window window for rendering
 	 */
 	void render(Window window);
+	
+	/**
+	 * Perform game cleanup.
+	 */
+	void cleanup();
 }
