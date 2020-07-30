@@ -2,6 +2,7 @@ package com.cangcui.gametest.game;
 
 import org.lwjgl.glfw.GLFW;
 
+import com.cangcui.gametest.engine.GameItem;
 import com.cangcui.gametest.engine.IGameLogic;
 import com.cangcui.gametest.engine.Window;
 import com.cangcui.gametest.engine.graph.Mesh;
@@ -17,19 +18,20 @@ public class DummyGame implements IGameLogic {
 	private float color = 0.0f;
 	private final Renderer renderer;
 	private Mesh mesh;
+	private GameItem gameItem[];
 	
 	public DummyGame() {
 		renderer = new Renderer();
 	}
 
 	@Override
-	public void init() throws Exception {
-		renderer.init();
+	public void init(Window window) throws Exception {
+		renderer.init(window);
 		float[] positions = new float[]{
-            -0.5f,  0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f,
-             0.5f, -0.5f, 0.0f,
-             0.5f,  0.5f, 0.0f,
+            -0.5f,  0.5f, -1.05f,
+            -0.5f, -0.5f, -1.05f,
+             0.5f, -0.5f, -1.05f,
+             0.5f,  0.5f, -1.05f,
         };
         float[] colors = new float[]{
             0.5f, 0.0f, 0.0f,
@@ -41,6 +43,8 @@ public class DummyGame implements IGameLogic {
             0, 1, 3, 3, 1, 2,
         };
 	    mesh = new Mesh(positions, colors, indices);
+	    gameItem = new GameItem[1];
+	    gameItem[0] = new GameItem(mesh);
 	}
 
 	@Override
@@ -67,7 +71,7 @@ public class DummyGame implements IGameLogic {
 	@Override
 	public void render(Window window) {
 		window.setClearColor(color, color, color, 1.0f);
-		renderer.render(window, mesh);
+		renderer.render(window, gameItem);
 	}
 
 	@Override

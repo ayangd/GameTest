@@ -25,7 +25,7 @@ public class Mesh {
         IntBuffer indicesBuffer = null;
         try {
             verticesBuffer = MemoryUtil.memAllocFloat(positions.length);
-            vertexCount = positions.length / 3;
+            vertexCount = indices.length;
             verticesBuffer.put(positions).flip();
             
             colorsBuffer = MemoryUtil.memAllocFloat(colors.length);
@@ -62,6 +62,20 @@ public class Mesh {
             if (indicesBuffer != null)
             	MemoryUtil.memFree(indicesBuffer);
         }
+    }
+    
+    public void render() {
+    	// Draw the mesh
+    	glBindVertexArray(getVaoId());
+    	glEnableVertexAttribArray(0);
+    	glEnableVertexAttribArray(1);
+    	
+    	glDrawElements(GL_TRIANGLES, getVertexCount(), GL_UNSIGNED_INT, 0);
+    	
+    	// Restore state
+    	glDisableVertexAttribArray(0);
+    	glDisableVertexAttribArray(1);
+    	glBindVertexArray(0);
     }
 
     public int getVaoId() {

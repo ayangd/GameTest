@@ -6,7 +6,7 @@ public interface IGameLogic {
 	 * Initialize the game logic.
 	 * @throws Exception
 	 */
-	void init() throws Exception;
+	void init(Window window) throws Exception;
 	
 	/**
 	 * Process any input from window.
