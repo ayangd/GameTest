@@ -38,4 +38,5 @@ dependencies {
 	runtimeOnly "org.lwjgl:lwjgl-stb::$lwjglNatives"
 	
 	compile group: 'org.joml', name: 'joml', version: '1.9.25'
+	compile group: 'org.l33tlabs.twl', name: 'pngdecoder', version: '1.0'
 }
