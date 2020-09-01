@@ -133,6 +133,10 @@ public class Window {
     public void setvSync(boolean vSync) {
         this.vSync = vSync;
     }
+    
+    public long getWindowHandle() {
+    	return windowHandle;
+    }
 
     public void update() {
         glfwSwapBuffers(windowHandle);

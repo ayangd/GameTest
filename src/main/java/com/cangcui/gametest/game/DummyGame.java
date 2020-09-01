@@ -1,10 +1,10 @@
 package com.cangcui.gametest.game;
 
-import org.lwjgl.glfw.GLFW;
-
 import com.cangcui.gametest.engine.GameItem;
 import com.cangcui.gametest.engine.IGameLogic;
+import com.cangcui.gametest.engine.MouseInput;
 import com.cangcui.gametest.engine.Window;
+import com.cangcui.gametest.engine.graph.Camera;
 import com.cangcui.gametest.engine.graph.Mesh;
 import com.cangcui.gametest.engine.graph.Texture;
 
@@ -12,17 +12,28 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.glfw.GLFW.*;
+
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 
 public class DummyGame implements IGameLogic {
+	
+	private static final float MOUSE_SENSITIVITY = 0.2f;
+	private static final float CAMERA_POS_STEP = 0.05f;
 	
 	private int direction = 0;
 	private float color = 0.0f;
 	private final Renderer renderer;
 	private Mesh mesh;
 	private GameItem gameItem[];
+	private final Camera camera;
+	private final Vector3f cameraInc;
 	
 	public DummyGame() {
 		renderer = new Renderer();
+		camera = new Camera();
+		cameraInc = new Vector3f();
 	}
 
 	@Override
@@ -131,36 +142,52 @@ public class DummyGame implements IGameLogic {
 	}
 
 	@Override
-	public void input(Window window) {
-		if (window.isKeyPressed(GLFW.GLFW_KEY_UP)) {
-			direction = 1;
-		} else if (window.isKeyPressed(GLFW.GLFW_KEY_DOWN)) {
-			direction = -1;
-		} else {
-			direction = 0;
+	public void input(Window window, MouseInput mouseInput) {
+		cameraInc.set(0);
+		if (window.isKeyPressed(GLFW_KEY_W)) {
+			cameraInc.z += -1;
+		}
+		if (window.isKeyPressed(GLFW_KEY_S)) {
+			cameraInc.z += 1;
+		}
+		
+		if (window.isKeyPressed(GLFW_KEY_A)) {
+			cameraInc.x += -1;
+		}
+		if (window.isKeyPressed(GLFW_KEY_D)) {
+			cameraInc.x += 1;
+		}
+		
+		if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) {
+			cameraInc.y += -1;
+		}
+		if (window.isKeyPressed(GLFW_KEY_SPACE)) {
+			cameraInc.y += 1;
 		}
 	}
 
 	@Override
-	public void update(float interval) {
-		color += direction * 0.01f;
-		if (color > 1.0f) {
-			color = 1.0f;
-		} else if (color < 0.0f) {
-			color = 0.0f;
-		}
+	public void update(float interval, MouseInput mouseInput) {
+		// Update camera position
+		camera.translateRelative(
+				cameraInc.x * CAMERA_POS_STEP,
+				cameraInc.y * CAMERA_POS_STEP,
+				cameraInc.z * CAMERA_POS_STEP);
 		
-		float rotation = gameItem[0].getRotation().x + 1.5f;
-		if ( rotation > 360 ) {
-		    rotation = 0;
+		// Update camera based on mouse
+		if (mouseInput.isLeftButtonPressed()) {
+			Vector2f rotVec = mouseInput.getDisplVec();
+			camera.rotate(
+					rotVec.x * MOUSE_SENSITIVITY,
+					rotVec.y * MOUSE_SENSITIVITY,
+					0);
 		}
-		gameItem[0].setRotation(rotation, rotation, rotation);
 	}
 
 	@Override
 	public void render(Window window) {
 		window.setClearColor(color, color, color, 1.0f);
-		renderer.render(window, gameItem);
+		renderer.render(window, gameItem, camera);
 	}
 
 	@Override

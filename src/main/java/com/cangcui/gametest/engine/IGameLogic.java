@@ -10,15 +10,17 @@ public interface IGameLogic {
 	
 	/**
 	 * Process any input from window.
-	 * @param window window input
+	 * @param window the window corresponding to the game
+	 * @param mouseInput mouse input
 	 */
-	void input(Window window);
+	void input(Window window, MouseInput mouseInput);
 	
 	/**
 	 * Update game by interval.
 	 * @param interval interval in seconds
+	 * @param mouseInput mouse input
 	 */
-	void update(float interval);
+	void update(float interval, MouseInput mouseInput);
 	
 	/**
 	 * Render the game to window.

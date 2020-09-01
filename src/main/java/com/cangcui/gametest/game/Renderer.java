@@ -10,6 +10,7 @@ import org.joml.Matrix4f;
 import com.cangcui.gametest.engine.GameItem;
 import com.cangcui.gametest.engine.Utils;
 import com.cangcui.gametest.engine.Window;
+import com.cangcui.gametest.engine.graph.Camera;
 import com.cangcui.gametest.engine.graph.ShaderProgram;
 import com.cangcui.gametest.engine.graph.Transformation;
 
@@ -34,7 +35,8 @@ public class Renderer {
 		shader.link();
 		
 		shader.createUniform("projectionMatrix");
-		shader.createUniform("worldMatrix");
+//		shader.createUniform("worldMatrix");
+		shader.createUniform("modelViewMatrix");
 		shader.createUniform("texture_sampler");
 		
 		window.setClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -44,7 +46,7 @@ public class Renderer {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 	
-	public void render(Window window, GameItem[] gameItems) {
+	public void render(Window window, GameItem[] gameItems, Camera camera) {
 	    clear();
 
 	    if ( window.isResized() ) {
@@ -58,13 +60,17 @@ public class Renderer {
 	    shader.setUniform("projectionMatrix", projectionMatrix);
 	    shader.setUniform("texture_sampler", 0);
 	    
+	    Matrix4f viewMatrix = transformation.getViewMatrix(camera);
+	    
 	    for (GameItem item: gameItems) {
-	    	Matrix4f worldMatrix =
-	    			transformation.getWorldMatrix(
-	    					item.getPosition(),
-	    					item.getRotation(),
-	    					item.getScale());
-	    	shader.setUniform("worldMatrix", worldMatrix);
+//	    	Matrix4f worldMatrix =
+//	    			transformation.getWorldMatrix(
+//	    					item.getPosition(),
+//	    					item.getRotation(),
+//	    					item.getScale());
+//	    	shader.setUniform("worldMatrix", worldMatrix);
+	    	Matrix4f modelViewMatrix = transformation.getModelViewMatrix(item, viewMatrix);
+	    	shader.setUniform("modelViewMatrix", modelViewMatrix);
 	    	item.getMesh().render();
 	    }
 
